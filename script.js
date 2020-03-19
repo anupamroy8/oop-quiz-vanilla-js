@@ -10,7 +10,7 @@ class Question {
   getCorrectAnswer() {
     return this.options[this.answerIndex];
   }
-  createUI() {
+  render() {
     let optionsUI = this.options
       .map(
         (option, i) => `<div>
@@ -33,8 +33,14 @@ class Question {
 }
 
 class Quiz {
-  constructor() {
+  constructor(rootElement, nextButtonElm) {
     this.questions = [];
+    this.index = 0;
+    this.rootElement = rootElement;
+    this.nextButtonElm = nextButtonElm;
+    this.nextButtonElm.addEventListener("click", () => {
+      this.displayNextQuestion(this.index);
+    });
   }
   addQuestion(title, options, answerIndex) {
     this.questions.push(new Question(title, options, answerIndex));
@@ -46,18 +52,27 @@ class Quiz {
     return questionToRemove;
   }
   accessQuestion(index) {
-    return this.questions[index];
+    return this.questions[this.index];
   }
-  render(rootElement) {
-    rootElement.innerHTML = this.questions
-      .map(question => {
-        return question.createUI();
-      })
-      .join("");
+  displayNextQuestion() {
+    if (this.questions.length - 1 === this.index) {
+      this.nextButtonElm.style.display = "none";
+    } else {
+      this.index = this.index + 1;
+    }
+    this.nextButtonElm.addEventListener("click", () => {
+      this.render(this.index);
+    });
+  }
+  render(questionIndex = 0) {
+    this.rootElement.innerHTML = this.questions[questionIndex].render();
   }
 }
 
-let quiz = new Quiz();
+let quiz = new Quiz(
+  document.querySelector("div.question"),
+  document.querySelector(".next")
+);
 quiz.addQuestion(
   "Inside which HTML element do we put the JavaScript?",
   [`a`, `b`, `c`, `d`],
@@ -73,4 +88,4 @@ quiz.addQuestion(
   [`a`, `b`, `c`, `d`],
   1
 );
-quiz.render(document.querySelector("div"));
+quiz.render();

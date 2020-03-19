@@ -2,9 +2,15 @@ html {
   font-family: sans-serif;
 }
 
-div.options {
+div.container {
   display: flex;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+div.options {
   margin-bottom: 5px;
 }
 
@@ -41,7 +47,7 @@ legend {
   padding: 5px 10px;
   border-radius: 0;
   border: 0;
-  font-size: 14px;
+  font-size: 20px;
 }
 
 button:hover,
